@@ -1,0 +1,91 @@
+#include <iostream>
+#include <vector>
+#include <math.h>
+using namespace std;
+
+
+void merge(vector<int>& arr, int left, int mid, int right) {
+    int n1 = mid - left + 1;
+    int n2 = right - mid;
+
+    vector<int> L(n1), R(n2);
+
+    for (int i = 0; i < n1; i++)
+        L[i] = arr[left + i];
+    for (int j = 0; j < n2; j++)
+        R[j] = arr[mid + 1 + j];
+
+    int i = 0;
+    int j = 0;
+    int k = left;
+
+    while (i < n1 && j < n2) {
+        if (L[i] <= R[j]) {
+            arr[k] = L[i];
+            i++;
+        }
+        else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++;
+        k++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++;
+        k++;
+    }
+}
+
+void mergeSort(vector<int>& arr, int left, int right) {
+    if (left < right) {
+        int mid = left + (right - left) / 2;
+
+        mergeSort(arr, left, mid);
+        mergeSort(arr, mid + 1, right);
+
+        merge(arr, left, mid, right);
+    }
+}
+
+
+
+int main() {
+    setlocale(LC_ALL, "RU");
+    vector<int> arr = {};
+    int n, a;
+    cout << "Заполнение массива: \n";
+    cout << "Ввод количества значений: \n";
+    cin >> n;
+    cout << "Ввод значений (целые числа от -100 до 100): \n";
+    for (int i = 0;i < n;i++)
+    {
+        cout << ": ";
+        cin >> a;
+        if (not(-100 <= a and a <= 100))
+        {
+            cout << "Введите целое число от -100 до 100\n";
+            i--;
+        }
+        else arr.push_back(a);
+    }
+
+    cout << "Исходный массив: ";
+    for (int num : arr) cout << num << " ";
+    cout << endl;
+
+
+    mergeSort(arr, 0, arr.size() - 1);
+
+    cout << "Отсортированный массив: ";
+    for (int num : arr) cout << num << " ";
+    cout << endl;
+    return 0;
+}
